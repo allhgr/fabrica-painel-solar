@@ -1,15 +1,12 @@
-import { IsOptional, IsString, IsNumber, IsInt } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
 export class CreateMateriaPrimaDto {
-  @IsOptional()
   @IsString()
-  descricao?: string;
+  descricao: string;
 
-  @IsOptional()
   @IsNumber()
-  preco?: number;
+  preco: number;
 
-  @IsOptional()
-  @IsInt()
-  quantidade?: number;
+  @IsNumber()
+  quantidade: number;
 }

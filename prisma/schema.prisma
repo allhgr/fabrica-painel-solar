@@ -26,31 +26,35 @@ model Cliente {
 }
 
 model Produto {
-  id_produto  Int         @id @default(autoincrement())
-  descricao   String?
-  preco       Float?
-  quantidade  Int?
-  estoque     Estoque[]
-  itensVenda  ItemVenda[]
+  id_produto       Int           @id @default(autoincrement())
+  descricao        String?
+  preco            Float?
+  quantidade       Int?
+  id_materia_prima Int?
+  materiaPrima     MateriaPrima? @relation(fields: [id_materia_prima], references: [id_materia_prima])
+  estoque          Estoque[]
+  itensVenda       ItemVenda[]
 }
 
 model Venda {
-  id         Int        @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   id_cliente Int
   id_usuario Int
   data_venda DateTime?
-  cliente    Cliente   @relation(fields: [id_cliente], references: [id_cliente])
-  usuario    Usuario   @relation(fields: [id_usuario], references: [id])
+  cliente    Cliente     @relation(fields: [id_cliente], references: [id_cliente])
+  usuario    Usuario     @relation(fields: [id_usuario], references: [id])
   itens      ItemVenda[]
 }
 
 model ItemVenda {
-  id_venda       Int     @id
+  id_venda       Int
   id_produto     Int
   quantidade     Int?
   preco_unitario Float?
   venda          Venda   @relation(fields: [id_venda], references: [id])
   produto        Produto @relation(fields: [id_produto], references: [id_produto])
+
+  @@id([id_venda, id_produto]) // <<<<<<--- ALTERADO AQUI (chave composta)
 }
 
 model Fornecedor {
@@ -62,37 +66,41 @@ model Fornecedor {
 }
 
 model MateriaPrima {
-  id_materia_prima Int         @id @default(autoincrement())
+  id_materia_prima Int          @id @default(autoincrement())
   descricao        String?
   preco            Float?
   quantidade       Int?
   estoque          Estoque[]
   itensCompra      ItemCompra[]
+  produtos         Produto[]
 }
 
 model Compra {
-  id            Int        @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   id_fornecedor Int
   id_usuario    Int
   data_compra   DateTime?
-  fornecedor    Fornecedor @relation(fields: [id_fornecedor], references: [id_fornecedor])
-  usuario       Usuario    @relation(fields: [id_usuario], references: [id])
+  fornecedor    Fornecedor   @relation(fields: [id_fornecedor], references: [id_fornecedor])
+  usuario       Usuario      @relation(fields: [id_usuario], references: [id])
   itens         ItemCompra[]
 }
 
 model ItemCompra {
-  id_compra        Int     @id
+  id_compra        Int
   id_materia_prima Int
   quantidade       Int?
   preco_unitario   Float?
   compra           Compra       @relation(fields: [id_compra], references: [id])
   materiaPrima     MateriaPrima @relation(fields: [id_materia_prima], references: [id_materia_prima])
+
+  @@id([id_compra, id_materia_prima]) // <<<<<<--- ALTERADO AQUI (chave composta)
 }
 
 model Estoque {
-  id               Int          @id @default(autoincrement())
-  id_produto       Int
-  id_materia_prima Int
-  produto          Produto      @relation(fields: [id_produto], references: [id_produto])
-  materiaPrima     MateriaPrima @relation(fields: [id_materia_prima], references: [id_materia_prima])
+  id               Int           @id @default(autoincrement())
+  id_produto       Int? // <<<<<<--- Agora pode ser NULL
+  id_materia_prima Int? // <<<<<<--- Agora pode ser NULL
+  quantidade       Int           @default(0) // <<<<<<--- Adicionado campo quantidade (essencial)
+  produto          Produto?      @relation(fields: [id_produto], references: [id_produto])
+  materiaPrima     MateriaPrima? @relation(fields: [id_materia_prima], references: [id_materia_prima])
 }

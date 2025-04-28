@@ -7,33 +7,58 @@ import { UpdateVendaDto } from './dto/update-venda.dto';
 export class VendaService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: CreateVendaDto) {
-    return this.prisma.venda.create({ 
+  create(createVendaDto: CreateVendaDto) {
+    return this.prisma.venda.create({
       data: {
-        ...data,
-        data_venda: data.data_venda
-          ? new Date(data.data_venda)
-          : undefined,
+        id_usuario: createVendaDto.id_usuario,
+        id_cliente: createVendaDto.id_cliente,
+        data_venda: createVendaDto.data_venda,
+        itens: {
+          create: createVendaDto.itens.map(item => ({
+            id_produto: item.id_produto,
+            quantidade: item.quantidade,
+            preco_unitario: item.preco_unitario,
+          })),
+        },
+      },
+      include: {
+        itens: true,
       },
     });
   }
 
   findAll() {
-    return this.prisma.venda.findMany();
+    return this.prisma.venda.findMany({
+      include: {
+        itens: true,
+      },
+    });
   }
 
   findOne(id: number) {
-    return this.prisma.venda.findUnique({ where: { id } });
+    return this.prisma.venda.findUnique({
+      where: { id },
+      include: {
+        itens: true,
+      },
+    });
   }
 
-  update(id: number, data: UpdateVendaDto) {
+  update(id: number, updateVendaDto: UpdateVendaDto) {
+    const { id_usuario, id_cliente, data_venda } = updateVendaDto;
     return this.prisma.venda.update({
       where: { id },
-      data,
+      data: {
+        ...(id_usuario && { id_usuario }),
+        ...(id_cliente && { id_cliente }),
+        ...(data_venda && { data_venda }),
+      },
     });
   }
 
   remove(id: number) {
-    return this.prisma.venda.delete({ where: { id } });
+    return this.prisma.venda.delete({
+      where: { id },
+    });
   }
 }

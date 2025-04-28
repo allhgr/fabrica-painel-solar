@@ -10,7 +10,7 @@ export class MateriaPrimaController {
   constructor(private readonly materiaPrimaService: MateriaPrimaService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Comprar uma nova matéria-prima' })
+  @ApiOperation({ summary: 'Registrar matéria-prima' })
   create(@Body() createMateriaPrimaDto: CreateMateriaPrimaDto) {
     return this.materiaPrimaService.create(createMateriaPrimaDto);
   }

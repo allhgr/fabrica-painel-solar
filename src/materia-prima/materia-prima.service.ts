@@ -7,8 +7,8 @@ import { UpdateMateriaPrimaDto } from './dto/update-materia-prima.dto';
 export class MateriaPrimaService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: CreateMateriaPrimaDto) {
-    return this.prisma.materiaPrima.create({ data });
+  create(createMateriaPrimaDto: CreateMateriaPrimaDto) {
+    return this.prisma.materiaPrima.create({ data: createMateriaPrimaDto });
   }
 
   findAll() {
@@ -16,17 +16,21 @@ export class MateriaPrimaService {
   }
 
   findOne(id: number) {
-    return this.prisma.materiaPrima.findUnique({ where: { id_materia_prima: id } });
+    return this.prisma.materiaPrima.findUnique({
+      where: { id_materia_prima: id },
+    });
   }
 
-  update(id: number, data: UpdateMateriaPrimaDto) {
+  update(id: number, updateMateriaPrimaDto: UpdateMateriaPrimaDto) {
     return this.prisma.materiaPrima.update({
       where: { id_materia_prima: id },
-      data,
+      data: updateMateriaPrimaDto,
     });
   }
 
   remove(id: number) {
-    return this.prisma.materiaPrima.delete({ where: { id_materia_prima: id } });
+    return this.prisma.materiaPrima.delete({
+      where: { id_materia_prima: id },
+    });
   }
 }

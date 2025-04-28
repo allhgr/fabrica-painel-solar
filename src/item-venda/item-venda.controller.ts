@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ItemVendaService } from './item-venda.service';
 import { CreateItemVendaDto } from './dto/create-item-venda.dto';
+import { UpdateItemVendaDto } from './dto/update-item-venda.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Relatório de Venda (ID)')
-@Controller('itens-venda')
+@ApiTags('Relatório de Vendas (ID)')
+@Controller('item-venda')
 export class ItemVendaController {
   constructor(private readonly itemVendaService: ItemVendaService) {}
 
   //@Post()
-  @ApiOperation({ summary: 'Criar um novo item de venda' })
   create(@Body() createItemVendaDto: CreateItemVendaDto) {
     return this.itemVendaService.create(createItemVendaDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os relatórios de venda' })
   findAll() {
     return this.itemVendaService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Buscar um relatório de venda por ID' })
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.itemVendaService.findOne(id);
+  @Get(':id_venda/:id_produto')
+  findOne(@Param('id_venda') id_venda: string, @Param('id_produto') id_produto: string) {
+    return this.itemVendaService.findOne(+id_venda, +id_produto);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Deletar um relatório de venda' })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.itemVendaService.remove(id);
+  //@Patch(':id_venda/:id_produto')
+  update(@Param('id_venda') id_venda: string, @Param('id_produto') id_produto: string, @Body() updateItemVendaDto: UpdateItemVendaDto) {
+    return this.itemVendaService.update(+id_venda, +id_produto, updateItemVendaDto);
+  }
+
+  @Delete(':id_venda/:id_produto')
+  remove(@Param('id_venda') id_venda: string, @Param('id_produto') id_produto: string) {
+    return this.itemVendaService.remove(+id_venda, +id_produto);
   }
 }
