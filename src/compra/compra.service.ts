@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCompraDto } from './dto/create-compra.dto';
 import { UpdateCompraDto } from './dto/update-compra.dto';
-import { MateriaPrima } from '@prisma/client'; // IMPORTANTE: importa o tipo correto
+import { MateriaPrima } from '@prisma/client';
 
 @Injectable()
 export class CompraService {
@@ -33,7 +33,7 @@ export class CompraService {
           data: {
             descricao: item.descricao,
             preco: item.preco_unitario ?? 0,
-            quantidade: 0, // PRECISA inicializar a quantidade se o modelo exigir
+            quantidade: 50, // PRECISA inicializar a quantidade se o modelo exigir
           },
         });
       }

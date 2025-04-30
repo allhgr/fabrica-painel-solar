@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsNumber } from 'class-validator';
+import { IsInt, IsOptional, IsNumber, IsString } from 'class-validator';
 
 export class CreateItemCompraDto {
   @IsInt()
@@ -6,6 +6,9 @@ export class CreateItemCompraDto {
 
   @IsInt()
   id_materia_prima: number;
+
+  @IsString()
+  descricao: string;
 
   @IsOptional()
   @IsInt()

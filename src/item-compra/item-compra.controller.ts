@@ -19,7 +19,7 @@ export class ItemCompraController {
     return this.itemCompraService.findAll();
   }
 
-  @Get(':id_compra/:id_materia_prima')
+  //@Get(':id_compra/:id_materia_prima')
   findOne(@Param('id_compra') id_compra: string, @Param('id_materia_prima') id_materia_prima: string) {
     return this.itemCompraService.findOne(+id_compra, +id_materia_prima);
   }
@@ -29,7 +29,7 @@ export class ItemCompraController {
     return this.itemCompraService.update(+id_compra, +id_materia_prima, updateItemCompraDto);
   }
 
-  @Delete(':id_compra/:id_materia_prima')
+  //@Delete(':id_compra/:id_materia_prima')
   remove(@Param('id_compra') id_compra: string, @Param('id_materia_prima') id_materia_prima: string) {
     return this.itemCompraService.remove(+id_compra, +id_materia_prima);
   }

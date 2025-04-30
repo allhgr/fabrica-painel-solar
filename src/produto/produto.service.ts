@@ -2,38 +2,48 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { MateriaPrimaService } from 'src/materia-prima/materia-prima.service';
 
 @Injectable()
 export class ProdutoService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly materiaPrima: MateriaPrimaService,
+  ) {}
 
   async create(createProdutoDto: CreateProdutoDto) {
     const { descricao, preco, id_materia_prima, quantidade } = createProdutoDto;
   
-    const estoqueMateriaPrima = await this.prisma.estoque.findFirst({
+    // Verifica se a matéria-prima existe e tem quantidade suficiente
+    const materiaPrima = await this.prisma.materiaPrima.findUnique({
       where: { id_materia_prima },
     });
   
-    if (!estoqueMateriaPrima || estoqueMateriaPrima.quantidade < quantidade) {
-      throw new Error('Estoque de matéria-prima insuficiente.');
+    if (!materiaPrima) {
+      throw new Error('Matéria-prima não encontrada.');
     }
   
-    // Decrementa a matéria-prima
-    await this.prisma.estoque.update({
-      where: { id: estoqueMateriaPrima.id },
+    if (materiaPrima.quantidade === null || materiaPrima.quantidade < quantidade) {
+      throw new Error('Quantidade de matéria-prima insuficiente.');
+    }
+  
+    // Atualiza a quantidade da matéria-prima (subtrai a usada)
+    await this.prisma.materiaPrima.update({
+      where: { id_materia_prima },
       data: { quantidade: { decrement: quantidade } },
     });
   
-    // Cria o produto
+    // Cria o produto vinculado à matéria-prima
     const produto = await this.prisma.produto.create({
       data: {
         descricao,
         preco,
         quantidade,
+        id_materia_prima,
       },
     });
   
-    // Atualiza estoque do produto
+    // Cria o estoque para o novo produto
     await this.prisma.estoque.create({
       data: {
         id_produto: produto.id_produto,
@@ -43,6 +53,7 @@ export class ProdutoService {
   
     return produto;
   }
+  
   
 
   async findAll() {

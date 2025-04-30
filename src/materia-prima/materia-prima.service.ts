@@ -27,8 +27,24 @@ export class MateriaPrimaService {
       data: updateMateriaPrimaDto,
     });
   }
-
-  remove(id: number) {
+    
+  async remove(id: number) {
+    // Apaga registros de Estoque relacionados
+    await this.prisma.estoque.deleteMany({
+      where: { id_materia_prima: id },
+    });
+  
+    // Apaga itens de compras que usam a matéria-prima
+    await this.prisma.itemCompra.deleteMany({
+      where: { id_materia_prima: id },
+    });
+  
+    // Apaga produtos que usam a matéria-prima
+    await this.prisma.produto.deleteMany({
+      where: { id_materia_prima: id },
+    });
+  
+    // Agora sim, pode apagar a matéria-prima
     return this.prisma.materiaPrima.delete({
       where: { id_materia_prima: id },
     });

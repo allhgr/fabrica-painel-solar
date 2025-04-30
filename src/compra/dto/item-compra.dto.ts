@@ -6,26 +6,16 @@ export class ItemCompraDto {
   @IsNumber()
   id_materia_prima?: number;
 
-  @ApiProperty({
-    example: 'Silício Ultra Puro',
-    description: 'Descrição da nova matéria-prima (opcional)',
-    required: false,
-  })
+  @ApiProperty({ example: 'Matéria Prima', description: 'Placa Solar', required: false, })
   @IsOptional()
   @IsString()
-  descricao?: string;
+  descricao: string;
 
-  @ApiProperty({
-    example: 10,
-    description: 'Quantidade da matéria-prima',
-  })
+  @ApiProperty({ example: 50, description: 'Quantidade da matéria-prima', })
   @IsNumber()
   quantidade: number;
 
-  @ApiProperty({
-    example: 15.5,
-    description: 'Preço unitário da matéria-prima',
-  })
+  @ApiProperty({ example: 150, description: 'Preço unitário da matéria-prima', })
   @IsNumber()
   preco_unitario: number;
 }

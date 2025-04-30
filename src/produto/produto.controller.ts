@@ -10,7 +10,7 @@ export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Fabricar um novo produto' })
+  @ApiOperation({ summary: 'Fabricar um produto no sistema (requer matéria-prima)' })
   @ApiResponse({ status: 201, description: 'Produto criado com sucesso.' })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   create(@Body() createProdutoDto: CreateProdutoDto) {
@@ -46,7 +46,7 @@ export class ProdutoController {
     return this.produtoService.update(id, updateProdutoDto);
   }
 
-  //@Delete(':id')
+  @Delete(':id')
   @ApiOperation({ summary: 'Deletar um produto' })
   @ApiParam({ name: 'id', description: 'ID do produto', type: Number })
   @ApiResponse({ status: 200, description: 'Produto deletado com sucesso.' })

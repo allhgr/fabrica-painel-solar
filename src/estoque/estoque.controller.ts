@@ -1,24 +1,30 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Param } from '@nestjs/common';
 import { EstoqueService } from './estoque.service';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-@ApiTags('Estoque')
 @Controller('estoque')
 export class EstoqueController {
   constructor(private readonly estoqueService: EstoqueService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os itens de estoque' })
-  findAll() {
-    return this.estoqueService.findAll();
+  @ApiOperation({ summary: 'Visualizar quantidade total de itens no estoque' })
+  @ApiResponse({ status: 200, description: 'Quantidade do estoque geral' })
+  getTotalQuantidade() {
+    return this.estoqueService.totalGeral();
+  }
+  
+
+  @Get('produto')
+  @ApiOperation({ summary: 'Visualizar quantidade de produtos no estoque' })
+  @ApiResponse({ status: 200, description: 'Quantidade do estoque de produtos' })
+  totalProduto() {
+    return this.estoqueService.totalProduto();
   }
 
-  @Get(':id_produto/:id_materia_prima')
-  @ApiOperation({ summary: 'Buscar estoque por produto e matéria-prima' })
-  findByProdutoAndMateriaPrima(
-    @Param('id_produto', ParseIntPipe) id_produto: number,
-    @Param('id_materia_prima', ParseIntPipe) id_materia_prima: number,
-  ) {
-    return this.estoqueService.findByProdutoAndMateriaPrima(id_produto, id_materia_prima);
+@Get('materia_prima')
+  @ApiOperation({ summary: 'Visualizar quantidade de materia prima no estoque' })
+  @ApiResponse({ status: 200, description: 'Quantidade do estoque de materia prima' })
+  totalMateriaPrima() {
+    return this.estoqueService.totalMateriaPrima();
   }
 }

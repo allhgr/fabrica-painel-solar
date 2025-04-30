@@ -19,7 +19,7 @@ export class ItemVendaController {
     return this.itemVendaService.findAll();
   }
 
-  @Get(':id_venda/:id_produto')
+  //@Get(':id_venda/:id_produto')
   findOne(@Param('id_venda') id_venda: string, @Param('id_produto') id_produto: string) {
     return this.itemVendaService.findOne(+id_venda, +id_produto);
   }
@@ -29,7 +29,7 @@ export class ItemVendaController {
     return this.itemVendaService.update(+id_venda, +id_produto, updateItemVendaDto);
   }
 
-  @Delete(':id_venda/:id_produto')
+  //@Delete(':id_venda/:id_produto')
   remove(@Param('id_venda') id_venda: string, @Param('id_produto') id_produto: string) {
     return this.itemVendaService.remove(+id_venda, +id_produto);
   }

@@ -7,5 +7,6 @@ import { PrismaModule } from '../prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [MateriaPrimaController],
   providers: [MateriaPrimaService],
+  exports: [MateriaPrimaService],
 })
 export class MateriaPrimaModule {}
